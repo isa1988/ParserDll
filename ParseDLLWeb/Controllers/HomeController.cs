@@ -13,9 +13,17 @@ namespace ParseDLLWeb.Controllers
 {
     public class HomeController : Controller
     {
+        private IWorkToFile _service;
+
+        public HomeController(IWorkToFile service)
+        {
+            if (service == null)
+                throw new ArgumentNullException(nameof(service));
+            _service = service;
+        }
+
         public IActionResult Index()
         {
-            
             return View();
         }
 
@@ -23,11 +31,9 @@ namespace ParseDLLWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(FileDllModel request)
         {
-            IWorkToFile workToFile = new WorkToFile();
-            request.Result = workToFile.ShowMethods(new FileDllDto {Path = request.Path});
+            request.Result = _service.ShowMethods(new FileDllDto {Path = request.Path});
 
             return View(request);
-
         }
 
         public IActionResult Privacy()
