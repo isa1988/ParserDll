@@ -1,0 +1,26 @@
+﻿@model ParseDLLWeb.Models.FileDllModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+ </div>
+
+<div class="col-md-4">
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Path" class="control-label"></label>
+            <input asp-for="Path" class="form-control" />
+            <span asp-validation-for="Path" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <pre>@Model?.Result</pre>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Show" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
