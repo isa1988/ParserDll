@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using ParseDLLService.Dtos;
 using ParseDLLService.Services.Contracts;
 
@@ -19,17 +17,18 @@ namespace ParseDLLService.Services
             string retVal = string.Empty;
             for (int i = 0; i <fileList.Length; i++)
             {
-                ResultReadFile(fileList[i], ref retVal);
+                retVal +=  ResultReadFile(fileList[i], fileDll.Path, retVal);
             }
             return retVal;
         }
 
-        private void ResultReadFile(string path, ref string result)
+        private string ResultReadFile(string fullPath, string path, string result)
         {
-            var asm = System.Reflection.Assembly.LoadFile(path);
-
-            var classesTypes = asm.DefinedTypes.ToList();
+            var asm = System.Reflection.Assembly.LoadFile(fullPath);
+            
+            var classesTypes = asm.DefinedTypes.Where(n => n.IsClass).ToList();
             MethodInfo[] methods = null;
+            result = "файл " + fullPath.Replace(path + "\\", "") + Environment.NewLine;
             foreach (var recType in classesTypes)
             {
                 result += recType.Name.Trim() + Environment.NewLine;
@@ -41,6 +40,7 @@ namespace ParseDLLService.Services
                 }
 
             }
+            return result;
         }
     }
 }
